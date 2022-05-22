@@ -1,5 +1,6 @@
 package com.project.example.service;
 
+import com.project.example.exception.CarValueInvalid;
 import com.project.example.exception.FinancingTypeInvalid;
 import com.project.example.exception.InternalError;
 import com.project.example.exception.MonthNumberInvalid;
@@ -33,6 +34,9 @@ public class FinancingService {
         } else if (finType.equals("external")) {
             if (monthNum % 12 != 0 || 12 > monthNum || 48 < monthNum) throw new MonthNumberInvalid();
         }
+        else throw new FinancingTypeInvalid();
+
+        if(carValue <= 0) throw new CarValueInvalid();
 
         try (FileReader reader = new FileReader(finDataPath)) {
             //Read JSON file
@@ -49,7 +53,8 @@ public class FinancingService {
             e.printStackTrace();
         }
 
-        return carValue * finFactor / monthNum;
+        double result = carValue * finFactor / monthNum;
+        return (double) (Math.round(result*100.0)/100.0);
     }
 
     public String saveInfo(String name, String contact, double financingValue) {

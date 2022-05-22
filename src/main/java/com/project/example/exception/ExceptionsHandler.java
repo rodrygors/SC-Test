@@ -32,7 +32,17 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public HttpErrorResponse handleGenericException(InternalError exception) {
         return new HttpErrorResponse(
-                500,
+                400,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler({CarValueInvalid.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public HttpErrorResponse handleGenericException(CarValueInvalid exception) {
+        return new HttpErrorResponse(
+                400,
                 exception.getMessage(),
                 LocalDateTime.now()
         );
